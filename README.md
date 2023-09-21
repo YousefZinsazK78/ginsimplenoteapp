@@ -6,12 +6,16 @@
      $ go run cmd/server/server.go
 ```
 
+--- 
+     
+### ! api version 1
+
 * handle crud request
-  * create note
-  * update note
-  * delete note
-  * read note
-  * read note by title
+  * [ ] create note
+  * [ ] update note
+  * [ ] delete note
+  * [ ] read note
+  * [ ] read note by title
 
 * packages :
   * gin http framework
