@@ -11,11 +11,11 @@
 ### ! api version 1
 
 * handle crud request
-  * [ ] create note
-  * [ ] update note
-  * [ ] delete note
-  * [ ] read note
-  * [ ] read note by title
+  * [x] create note
+  * [x] update note
+  * [x] delete note
+  * [x] read note
+  * [x] read note by title
 
 * packages :
   * gin http framework
