@@ -1,7 +1,13 @@
 package handler
 
-import "github.com/gin-gonic/gin"
+import (
+	"net/http"
 
-func (h *Handler) HandleInsertNote(c *gin.Context) error {
-	return nil
+	"github.com/gin-gonic/gin"
+)
+
+func (h *handler) HandleInsertNote(c *gin.Context) {
+	c.JSON(http.StatusOK, map[string]string{
+		"result": "hello world",
+	})
 }

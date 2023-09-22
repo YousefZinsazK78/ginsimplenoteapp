@@ -15,8 +15,19 @@ type NoteStorer interface {
 	UpdateNote(models.Note) error
 }
 
-func (d *database) InsertNote(note models.Note) error {
+type noteStore struct {
+	database
+}
+
+func NewNoteStore(db database) *noteStore {
+	return &noteStore{
+		database: db,
+	}
+}
+
+func (d *noteStore) InsertNote(note models.Note) error {
 	stmt, err := d.DB.Prepare("INSERT INTO note(title,body) VALUES($1,$2)")
+
 	if err != nil {
 		return err
 	}
@@ -30,7 +41,7 @@ func (d *database) InsertNote(note models.Note) error {
 	return nil
 }
 
-func (d *database) GetNotes() ([]models.Note, error) {
+func (d *noteStore) GetNotes() ([]models.Note, error) {
 	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()
 	rows, err := d.DB.QueryContext(ctx, "SELECT * FROM NOTETBL")
@@ -51,7 +62,7 @@ func (d *database) GetNotes() ([]models.Note, error) {
 	return noteModels, nil
 }
 
-func (d *database) GetNotesByTitle(title string) (*models.Note, error) {
+func (d *noteStore) GetNotesByTitle(title string) (*models.Note, error) {
 	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()
 	row := d.DB.QueryRowContext(ctx, "SELECT * FROM NOTETBL WHERE TITLE=$1", title)
@@ -62,7 +73,7 @@ func (d *database) GetNotesByTitle(title string) (*models.Note, error) {
 	return &noteM, nil
 }
 
-func (d *database) DeleteNote(id int) error {
+func (d *noteStore) DeleteNote(id int) error {
 	rootCtx := context.Background()
 	ctx, cancel := context.WithCancel(rootCtx)
 	defer cancel()
@@ -80,7 +91,7 @@ func (d *database) DeleteNote(id int) error {
 	return nil
 }
 
-func (d *database) UpdateNote(note models.Note) error {
+func (d *noteStore) UpdateNote(note models.Note) error {
 	rootCtx := context.Background()
 	ctx, cancel := context.WithCancel(rootCtx)
 	defer cancel()
