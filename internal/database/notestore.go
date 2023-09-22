@@ -2,6 +2,7 @@ package database
 
 import (
 	"context"
+	"log"
 	"time"
 
 	"github.com/yousefzinsazk78/simple_note_api/internal/models"
@@ -26,7 +27,7 @@ func NewNoteStore(db database) *noteStore {
 }
 
 func (d *noteStore) InsertNote(note models.Note) error {
-	stmt, err := d.DB.Prepare("INSERT INTO note(title,body) VALUES($1,$2)")
+	stmt, err := d.DB.Prepare("INSERT INTO notetbl(title,body) VALUES($1,$2)")
 
 	if err != nil {
 		return err
@@ -44,7 +45,7 @@ func (d *noteStore) InsertNote(note models.Note) error {
 func (d *noteStore) GetNotes() ([]models.Note, error) {
 	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()
-	rows, err := d.DB.QueryContext(ctx, "SELECT * FROM NOTETBL")
+	rows, err := d.DB.QueryContext(ctx, "SELECT * FROM notetbl;")
 	if err != nil {
 		return nil, err
 	}
@@ -65,7 +66,7 @@ func (d *noteStore) GetNotes() ([]models.Note, error) {
 func (d *noteStore) GetNotesByTitle(title string) (*models.Note, error) {
 	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()
-	row := d.DB.QueryRowContext(ctx, "SELECT * FROM NOTETBL WHERE TITLE=$1", title)
+	row := d.DB.QueryRowContext(ctx, "SELECT * FROM notetbl WHERE TITLE=$1", title)
 	var noteM models.Note
 	if err := row.Scan(&noteM.ID, &noteM.Title, &noteM.Body, &noteM.CreatedAt, &noteM.UpdatedAt); err != nil {
 		return nil, err
@@ -77,7 +78,7 @@ func (d *noteStore) DeleteNote(id int) error {
 	rootCtx := context.Background()
 	ctx, cancel := context.WithCancel(rootCtx)
 	defer cancel()
-	stmt, err := d.DB.PrepareContext(ctx, "DELETE NOTETBL WHERE ID=$1;")
+	stmt, err := d.DB.PrepareContext(ctx, "DELETE FROM notetbl WHERE ID=$1;")
 	if err != nil {
 		return err
 	}
@@ -92,10 +93,11 @@ func (d *noteStore) DeleteNote(id int) error {
 }
 
 func (d *noteStore) UpdateNote(note models.Note) error {
+	log.Println(note)
 	rootCtx := context.Background()
 	ctx, cancel := context.WithCancel(rootCtx)
 	defer cancel()
-	stmt, err := d.DB.PrepareContext(ctx, "UPDATE NOTETBL SET TITLE=$1, BODY=$2, UPDATED_AT=$3 WHERE ID=$4;")
+	stmt, err := d.DB.PrepareContext(ctx, "UPDATE notetbl SET TITLE=$1, BODY=$2, UPDATED_AT=$3 WHERE ID=$4;")
 	if err != nil {
 		return err
 	}
