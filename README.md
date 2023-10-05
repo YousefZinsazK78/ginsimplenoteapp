@@ -17,6 +17,16 @@
   * [x] read note
   * [x] read note by title
 
+### ! api version 2
+
+* handle crud request
+  * [ ] create post
+  * [ ] update post
+  * [ ] delete post
+  * [ ] read post
+  * [ ] read post by title
+
+
 * packages :
   * gin http framework
   * zerolog or slog 🤔

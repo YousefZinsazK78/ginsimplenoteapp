@@ -31,15 +31,15 @@ func main() {
 		noteStore = database.NewNoteStore(db)
 		helper    = handler.NewHandler(noteStore)
 		r         = gin.Default()
-		v1        = r.Group("/api/v2")
+		v2        = r.Group("/api/v2")
 	)
 
 	///post api v1
-	v1.POST("/notes", helper.HandleInsertNote)
-	v1.GET("/notes", helper.HandleGetNotes)
-	v1.GET("/notes/title/:title", helper.HandleGetNoteByTitle)
-	v1.DELETE("/notes/delete/:id", helper.HandleDeleteNote)
-	v1.PUT("/notes/update", helper.HandlePutNote)
+	v2.POST("/posts", helper.HandleInsertNote)
+	v2.GET("/posts", helper.HandleGetNotes)
+	v2.GET("/posts/title/:title", helper.HandleGetNoteByTitle)
+	v2.DELETE("/posts/delete/:id", helper.HandleDeleteNote)
+	v2.PUT("/posts/update", helper.HandlePutNote)
 
 	if err := r.Run(":8000"); err != nil {
 		panic(err)
