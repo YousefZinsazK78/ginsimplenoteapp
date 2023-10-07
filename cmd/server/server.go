@@ -7,8 +7,6 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
 	_ "github.com/lib/pq"
-	"github.com/yousefzinsazk78/simple_note_api/internal/database"
-	"github.com/yousefzinsazk78/simple_note_api/internal/handler"
 )
 
 func main() {
@@ -27,19 +25,19 @@ func main() {
 	}
 
 	var (
-		db        = database.NewDatabase(dbConn)
-		noteStore = database.NewNoteStore(db)
-		helper    = handler.NewHandler(noteStore)
-		r         = gin.Default()
-		v1        = r.Group("/api/v1")
+		// db        = database.NewDatabase(dbConn)
+		// noteStore = database.NewNoteStore(db)
+		// helper    = handler.NewHandler(noteStore)
+		r = gin.Default()
+		// v1 = r.Group("/api/v1")
 	)
 
 	///note api v1
-	v1.POST("/notes", helper.HandleInsertNote)
-	v1.GET("/notes", helper.HandleGetNotes)
-	v1.GET("/notes/title/:title", helper.HandleGetNoteByTitle)
-	v1.DELETE("/notes/delete/:id", helper.HandleDeleteNote)
-	v1.PUT("/notes/update", helper.HandlePutNote)
+	// v1.POST("/notes", helper.HandleInsertNote)
+	// v1.GET("/notes", helper.HandleGetNotes)
+	// v1.GET("/notes/title/:title", helper.HandleGetNoteByTitle)
+	// v1.DELETE("/notes/delete/:id", helper.HandleDeleteNote)
+	// v1.PUT("/notes/update", helper.HandlePutNote)
 
 	if err := r.Run(":8000"); err != nil {
 		panic(err)

@@ -23,3 +23,18 @@ type Post struct {
 	CreatedAt time.Time    `json:"createdat"`
 	UpdatedAt sql.NullTime `json:"updatedat"`
 }
+
+type User struct {
+	ID       int    `json:"id"`
+	RoleID   int    `json:"role_id"`
+	Username string `json:"username"`
+	Password string `json:"-"`
+	Email    string `json:"email"`
+	Role     Role   `json:"-"`
+}
+
+type Role struct {
+	ID          int    `json:"id"`
+	Name        string `json:"name"`
+	Description string `json:"description"`
+}

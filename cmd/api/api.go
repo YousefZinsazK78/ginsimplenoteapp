@@ -35,6 +35,7 @@ func main() {
 		v2        = r.Group("/api/v2")
 	)
 
+	/// users : admin(manage user, manage role) , author(manage post, manage comments) , anonymous-unauthorized user
 	///post api v2
 	v2.POST("/posts", helper.HandleInsertPost)
 	v2.GET("/posts", helper.HandleGetPosts)
