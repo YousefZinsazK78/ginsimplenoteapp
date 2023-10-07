@@ -29,17 +29,18 @@ func main() {
 	var (
 		db        = database.NewDatabase(dbConn)
 		noteStore = database.NewNoteStore(db)
-		helper    = handler.NewHandler(noteStore)
+		postStore = database.NewPostStore(db)
+		helper    = handler.NewHandler(noteStore, postStore)
 		r         = gin.Default()
 		v2        = r.Group("/api/v2")
 	)
 
 	///post api v1
-	v2.POST("/posts", helper.HandleInsertNote)
-	v2.GET("/posts", helper.HandleGetNotes)
-	v2.GET("/posts/title/:title", helper.HandleGetNoteByTitle)
-	v2.DELETE("/posts/delete/:id", helper.HandleDeleteNote)
-	v2.PUT("/posts/update", helper.HandlePutNote)
+	v2.POST("/posts", helper.HandleInsertPost)
+	// v2.GET("/posts", helper.HandleGetNotes)
+	// v2.GET("/posts/title/:title", helper.HandleGetNoteByTitle)
+	// v2.DELETE("/posts/delete/:id", helper.HandleDeleteNote)
+	// v2.PUT("/posts/update", helper.HandlePutNote)
 
 	if err := r.Run(":8000"); err != nil {
 		panic(err)

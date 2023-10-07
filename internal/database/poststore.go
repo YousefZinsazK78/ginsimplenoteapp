@@ -8,10 +8,10 @@ import (
 
 type PostStorer interface {
 	InsertPost(models.Post) error
-	GetPosts() ([]models.Post, error)
-	GetPostByTitle(string) (models.Post, error)
-	DeletePost(int) error
-	Update(models.Post) error
+	// GetPosts() ([]models.Post, error)
+	// GetPostByTitle(string) (models.Post, error)
+	// DeletePost(int) error
+	// Update(models.Post) error
 }
 
 type postStore struct {
@@ -24,8 +24,8 @@ func NewPostStore(db database) *postStore {
 	}
 }
 
-func (d *noteStore) InsertPost(post models.Post) error {
-	stmt, err := d.DB.Prepare("INSERT INTO notetbl(title,body) VALUES($1,$2)")
+func (d *postStore) InsertPost(post models.Post) error {
+	stmt, err := d.DB.Prepare("INSERT INTO posttbl(title,subtitle,body,authorID) VALUES($1,$2,$3,$4)")
 
 	if err != nil {
 		return err
@@ -33,7 +33,7 @@ func (d *noteStore) InsertPost(post models.Post) error {
 	defer stmt.Close()
 	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()
-	_, err = stmt.ExecContext(ctx, note.Title, note.Body)
+	_, err = stmt.ExecContext(ctx, post.Title, post.Subtitle, post.Body, post.AuthorID)
 	if err != nil {
 		return err
 	}
