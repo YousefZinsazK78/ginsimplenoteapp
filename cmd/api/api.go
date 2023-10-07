@@ -35,13 +35,14 @@ func main() {
 		v2        = r.Group("/api/v2")
 	)
 
-	///post api v1
+	///post api v2
 	v2.POST("/posts", helper.HandleInsertPost)
-	// v2.GET("/posts", helper.HandleGetNotes)
-	// v2.GET("/posts/title/:title", helper.HandleGetNoteByTitle)
-	// v2.DELETE("/posts/delete/:id", helper.HandleDeleteNote)
-	// v2.PUT("/posts/update", helper.HandlePutNote)
+	v2.GET("/posts", helper.HandleGetPosts)
+	v2.GET("/posts/title/:title", helper.HandleGetPostByTitle)
+	v2.DELETE("/posts/delete/:id", helper.HandleDeletePost)
+	v2.PUT("/posts/update", helper.HandlePutPost)
 
+	///http://localhost:8000/api/v2/posts
 	if err := r.Run(":8000"); err != nil {
 		panic(err)
 	}
