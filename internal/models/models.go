@@ -3,6 +3,8 @@ package models
 import (
 	"database/sql"
 	"time"
+
+	"golang.org/x/crypto/bcrypt"
 )
 
 type Note struct {
@@ -25,16 +27,31 @@ type Post struct {
 }
 
 type User struct {
-	ID       int    `json:"id"`
-	RoleID   int    `json:"role_id"`
-	Username string `json:"username"`
-	Password string `json:"-"`
-	Email    string `json:"email"`
-	Role     Role   `json:"-"`
+	ID        int          `json:"id"`
+	RoleID    int          `json:"role_id"`
+	Username  string       `json:"username"`
+	Password  string       `json:"-"`
+	Email     string       `json:"email"`
+	CreatedAt time.Time    `json:"createdat"`
+	updatedat sql.NullTime `json:"updatedat"`
 }
 
 type Role struct {
 	ID          int    `json:"id"`
 	Name        string `json:"name"`
 	Description string `json:"description"`
+}
+
+// utils methods
+func (user *User) HashPassword() error {
+	passHash, err := bcrypt.GenerateFromPassword([]byte(user.Password), bcrypt.DefaultCost)
+	if err != nil {
+		return err
+	}
+	user.Password = string(passHash)
+	return nil
+}
+
+func (user *User) ValidatePassword(password string) error {
+	return bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(password))
 }
