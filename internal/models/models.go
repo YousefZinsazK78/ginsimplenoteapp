@@ -26,6 +26,17 @@ type Post struct {
 	UpdatedAt sql.NullTime `json:"updatedat"`
 }
 
+type Register struct {
+	Username string `json:"username,required"`
+	Email    string `json:"email,required"`
+	Password string `json:"password,required"`
+}
+
+type Login struct {
+	Username string `json:"username,required"`
+	Password string `json:"password,required"`
+}
+
 type User struct {
 	ID        int          `json:"id"`
 	RoleID    int          `json:"role_id"`

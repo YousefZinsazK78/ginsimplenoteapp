@@ -9,6 +9,7 @@ import (
 type UserStorer interface {
 	InsertUser(models.User) error
 	GetUsers() ([]models.User, error)
+	GetUserByUsername(string) (*models.User, error)
 	GetUserByID(int) (*models.User, error)
 	UpdateUser(models.UserRole) error
 }
@@ -57,6 +58,17 @@ func (d *userStore) GetUsers() ([]models.User, error) {
 	}
 
 	return userModels, nil
+}
+
+func (d *userStore) GetUserByUsername(username string) (*models.User, error) {
+	ctx, cancel := context.WithCancel(context.Background())
+	defer cancel()
+	row := d.DB.QueryRowContext(ctx, "SELECT * FROM usertbl WHERE username=$1", username)
+	var userM models.User
+	if err := row.Scan(&userM.ID, &userM.RoleID, &userM.Username, &userM.Password, &userM.Email, &userM.CreatedAt, &userM.UpdatedAt); err != nil {
+		return nil, err
+	}
+	return &userM, nil
 }
 
 func (d *userStore) GetUserByID(id int) (*models.User, error) {
