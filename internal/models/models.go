@@ -33,7 +33,12 @@ type User struct {
 	Password  string       `json:"-"`
 	Email     string       `json:"email"`
 	CreatedAt time.Time    `json:"createdat"`
-	updatedat sql.NullTime `json:"updatedat"`
+	UpdatedAt sql.NullTime `json:"updatedat"`
+}
+
+type UserRole struct {
+	ID     int `json:"id"`
+	RoleID int `json:"role_id"`
 }
 
 type Role struct {
