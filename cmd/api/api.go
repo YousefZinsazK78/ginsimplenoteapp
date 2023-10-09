@@ -27,18 +27,19 @@ func main() {
 	}
 
 	var (
-		db        = database.NewDatabase(dbConn)
-		noteStore = database.NewNoteStore(db)
-		postStore = database.NewPostStore(db)
-		roleStore = database.NewRoleStore(db)
-		userStore = database.NewUserStore(db)
-		helper    = handler.NewHandler(noteStore, postStore, roleStore, userStore)
-		r         = gin.Default()
-		v2        = r.Group("/api/v2")
+		db         = database.NewDatabase(dbConn)
+		noteStore  = database.NewNoteStore(db)
+		postStore  = database.NewPostStore(db)
+		roleStore  = database.NewRoleStore(db)
+		userStore  = database.NewUserStore(db)
+		helper     = handler.NewHandler(noteStore, postStore, roleStore, userStore)
+		r          = gin.Default()
+		authrouter = r.Group("/auth/user")
+		v2         = r.Group("/api/v2")
 	)
 
-	/// users : admin(manage user, manage role) ,
-	///  author(manage post, manage comments) , anonymous-unauthorized user
+	authrouter.POST("/register", helper.Register)
+	authrouter.POST("/login", helper.Login)
 
 	///post api v2
 	v2.POST("/posts", helper.HandleInsertPost)

@@ -32,6 +32,10 @@ func (u *userStore) InsertUser(user models.User) error {
 	defer stmt.Close()
 	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()
+	//hash password before inserted it in database...
+	if err := user.HashPassword(); err != nil {
+		return err
+	}
 	_, err = stmt.ExecContext(ctx, user.RoleID, user.Username, user.Password, user.Email)
 	if err != nil {
 		return err
