@@ -9,6 +9,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/go-playground/validator"
 	"github.com/yousefzinsazk78/simple_note_api/internal/models"
+	"github.com/yousefzinsazk78/simple_note_api/internal/utils"
 )
 
 // Register user
@@ -69,7 +70,13 @@ func (h *handler) Login(context *gin.Context) {
 		return
 	}
 
-	context.JSON(http.StatusOK, gin.H{"username": input.Username, "message": "Successfully logged in"})
+	jwt, err := utils.GenerateJWT(*user)
+	if err != nil {
+		context.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	context.JSON(http.StatusOK, gin.H{"token": jwt, "username": input.Username, "message": "Successfully logged in"})
 
 }
 
