@@ -76,6 +76,7 @@ func (h *handler) Login(context *gin.Context) {
 		return
 	}
 
+	fmt.Println(jwt)
 	context.JSON(http.StatusOK, gin.H{"token": jwt, "username": input.Username, "message": "Successfully logged in"})
 
 }
