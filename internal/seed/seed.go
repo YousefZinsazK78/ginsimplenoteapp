@@ -50,31 +50,31 @@ func seedUserTbl(userStore database.UserStorer) error {
 			Password: os.Getenv("ADMIN_PASSWORD"),
 			Email:    os.Getenv("ADMIN_EMAIL"),
 		}
-		// user2 = models.User{
-		// 	RoleID:   2,
-		// 	Username: "sina",
-		// 	Password: "password123",
-		// 	Email:    "sina.1378@gmail.com",
-		// }
-		// user3 = models.User{
-		// 	RoleID:   3,
-		// 	Username: "atta",
-		// 	Password: "passwordatta",
-		// 	Email:    "atta.1378@gmail.com",
-		// }
+		user2 = models.User{
+			RoleID:   2,
+			Username: "sina",
+			Password: "password123",
+			Email:    "sina.1378@gmail.com",
+		}
+		user3 = models.User{
+			RoleID:   3,
+			Username: "atta",
+			Password: "passwordatta",
+			Email:    "atta.1378@gmail.com",
+		}
 	)
 
 	if err := userStore.InsertUser(user1); err != nil {
 		return err
 	}
 
-	// if err := userStore.InsertUser(user2); err != nil {
-	// 	return err
-	// }
+	if err := userStore.InsertUser(user2); err != nil {
+		return err
+	}
 
-	// if err := userStore.InsertUser(user3); err != nil {
-	// 	return err
-	// }
+	if err := userStore.InsertUser(user3); err != nil {
+		return err
+	}
 
 	return nil
 }
@@ -95,14 +95,12 @@ func main() {
 	}
 
 	var (
-		db = database.NewDatabase(dbConn)
-		// roleStore = database.NewRoleStore(db)
+		db        = database.NewDatabase(dbConn)
+		roleStore = database.NewRoleStore(db)
 
 		userstore = database.NewUserStore(db)
 	)
 
-	_ = userstore
-
-	// seedRoleTbl(roleStore)
-	// seedUserTbl(userstore)
+	seedRoleTbl(roleStore)
+	seedUserTbl(userstore)
 }

@@ -52,7 +52,7 @@ func (h *handler) HandleGetCommentsByBody(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"result": note})
 }
 
-func (h *handler) HandleUdpateComments(c *gin.Context) {
+func (h *handler) HandleUpdateComments(c *gin.Context) {
 	//bind note model
 	commentID, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
