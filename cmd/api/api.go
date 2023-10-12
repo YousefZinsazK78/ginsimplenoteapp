@@ -28,27 +28,36 @@ func main() {
 	}
 
 	var (
-		db          = database.NewDatabase(dbConn)
-		noteStore   = database.NewNoteStore(db)
-		postStore   = database.NewPostStore(db)
-		roleStore   = database.NewRoleStore(db)
-		userStore   = database.NewUserStore(db)
-		helper      = handler.NewHandler(noteStore, postStore, roleStore, userStore)
-		r           = gin.Default()
-		authrouter  = r.Group("/auth/user")
-		adminrouter = r.Group("/admin")
-		v2          = r.Group("/api/v2")
+		db           = database.NewDatabase(dbConn)
+		noteStore    = database.NewNoteStore(db)
+		postStore    = database.NewPostStore(db)
+		roleStore    = database.NewRoleStore(db)
+		userStore    = database.NewUserStore(db)
+		commentStore = database.NewCommentStore(db)
+		helper       = handler.NewHandler(noteStore, postStore, roleStore, userStore, commentStore)
+		r            = gin.Default()
+		authrouter   = r.Group("/auth/user")
+		adminrouter  = r.Group("/admin")
+		v2           = r.Group("/api/v2")
 	)
 
 	authrouter.POST("/register", helper.Register)
 	authrouter.POST("/login", helper.Login)
 
 	v2.Use(utils.JWTAuthAuthor())
+	//post api
 	v2.POST("/posts", helper.HandleInsertPost)
 	v2.GET("/posts", helper.HandleGetPosts)
 	v2.GET("/posts/title/:title", helper.HandleGetPostByTitle)
 	v2.DELETE("/posts/delete/:id", helper.HandleDeletePost)
 	v2.PUT("/posts/update", helper.HandlePutPost)
+	//comment api
+	v2.POST("/comment", helper.HandleInsertComment)
+	v2.GET("/comments", helper.HandleGetComments)
+	v2.GET("/comments/:id", helper.HandleGetCommentsByID)
+	v2.GET("/comments/body/:body", helper.HandleGetCommentsByBody)
+	v2.PUT("/comment/:id", helper.HandleUpdateComments)
+	v2.DELETE("/comment/delete/:id", helper.HandleDeleteComment)
 
 	adminrouter.Use(utils.JWTAuth())
 	adminrouter.GET("/users", helper.GetUsers)
