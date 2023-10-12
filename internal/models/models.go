@@ -7,6 +7,21 @@ import (
 	"golang.org/x/crypto/bcrypt"
 )
 
+//id , post_id, author_id, body,created_at, updated_at, like
+
+type Comment struct {
+	ID        int          `json:"id"`
+	PostID    int          `json:"post_id"`
+	AuthorID  int          `json:"author_id"`
+	Body      string       `json:"body"`
+	CreatedAt time.Time    `json:"created_at"`
+	UpdatedAt sql.NullTime `json:"udpated_at"`
+}
+
+type UpdateCommentParam struct {
+	Body string `json:"body"`
+}
+
 type Note struct {
 	ID        int        `json:"id"`
 	Title     string     `json:"title"`
