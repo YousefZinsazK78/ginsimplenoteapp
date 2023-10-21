@@ -1,10 +1,13 @@
 package handler
 
 import (
+	"log"
 	"net/http"
+	"path/filepath"
 	"strconv"
 
 	"github.com/gin-gonic/gin"
+	"github.com/google/uuid"
 	"github.com/yousefzinsazk78/simple_note_api/internal/models"
 )
 
@@ -71,4 +74,23 @@ func (h *handler) HandlePutPost(c *gin.Context) {
 		return
 	}
 	c.JSON(http.StatusOK, gin.H{"result": "update successfully."})
+}
+
+func (h *handler) HandleUpload(c *gin.Context) {
+	file, err := c.FormFile("file")
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"result": err})
+		return
+	}
+	log.Println(file.Filename)
+	extFile := filepath.Ext(file.Filename)
+	newFilename := uuid.New().String() + extFile
+	if err := c.SaveUploadedFile(file, "./public"+newFilename); err != nil {
+		c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{
+			"message": "Unable to save the file",
+		})
+		return
+	}
+	c.JSON(http.StatusOK, gin.H{"result": "image upload successfully."})
+
 }

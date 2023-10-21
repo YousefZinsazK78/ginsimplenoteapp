@@ -40,6 +40,9 @@ func main() {
 		adminrouter  = r.Group("/admin")
 		v2           = r.Group("/api/v2")
 	)
+	//8 mb
+	r.MaxMultipartMemory = 8 << 20
+	r.Static("/", "./public")
 
 	authrouter.POST("/register", helper.Register)
 	authrouter.POST("/login", helper.Login)
