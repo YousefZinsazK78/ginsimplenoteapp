@@ -10,10 +10,10 @@ import (
 //id , post_id, author_id, body,created_at, updated_at, like
 
 type Image struct {
-	ID        int    `json:"id"`
-	image_url string `json:"image_url"`
-	postID    int    `json:"post_id"`
-	userID    int    `json:"user_id"`
+	ID       int    `json:"id"`
+	ImageUrl string `json:"image_url"`
+	PostID   int    `json:"post_id"`
+	UserID   int    `json:"user_id"`
 }
 
 type Comment struct {
