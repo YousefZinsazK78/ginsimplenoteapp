@@ -91,6 +91,7 @@ func (h *handler) HandleUpload(c *gin.Context) {
 		})
 		return
 	}
+
 	userM, ok := c.Get("userModel")
 	if !ok {
 		c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{

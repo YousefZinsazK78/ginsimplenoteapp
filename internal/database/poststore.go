@@ -27,7 +27,7 @@ func NewPostStore(db database) *postStore {
 }
 
 func (d *postStore) InsertPost(post models.Post) error {
-	stmt, err := d.DB.Prepare("INSERT INTO posttbl(title,subtitle,body,authorID) VALUES($1,$2,$3,$4)")
+	stmt, err := d.DB.Prepare("INSERT INTO posttbl(title,subtitle,body,authorID,imgurl) VALUES($1,$2,$3,$4,$5)")
 
 	if err != nil {
 		return err
@@ -35,7 +35,7 @@ func (d *postStore) InsertPost(post models.Post) error {
 	defer stmt.Close()
 	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()
-	_, err = stmt.ExecContext(ctx, post.Title, post.Subtitle, post.Body, post.AuthorID)
+	_, err = stmt.ExecContext(ctx, post.Title, post.Subtitle, post.Body, post.AuthorID, post.ImgUrl)
 	if err != nil {
 		return err
 	}
@@ -54,7 +54,7 @@ func (d *postStore) GetPosts() ([]models.Post, error) {
 	var postModels []models.Post
 	for rows.Next() {
 		var postM models.Post
-		if err := rows.Scan(&postM.ID, &postM.Title, &postM.Subtitle, &postM.Body, &postM.AuthorID, &postM.CreatedAt, &postM.UpdatedAt); err != nil {
+		if err := rows.Scan(&postM.ID, &postM.Title, &postM.Subtitle, &postM.Body, &postM.AuthorID, &postM.ImgUrl, &postM.CreatedAt, &postM.UpdatedAt); err != nil {
 			return nil, err
 		}
 		postModels = append(postModels, postM)
@@ -68,7 +68,7 @@ func (d *postStore) GetPostByTitle(title string) (*models.Post, error) {
 	defer cancel()
 	row := d.DB.QueryRowContext(ctx, "SELECT * FROM posttbl WHERE TITLE=$1", title)
 	var postM models.Post
-	if err := row.Scan(&postM.ID, &postM.Title, &postM.Subtitle, &postM.Body, &postM.AuthorID, &postM.CreatedAt, &postM.UpdatedAt); err != nil {
+	if err := row.Scan(&postM.ID, &postM.Title, &postM.Subtitle, &postM.Body, &postM.AuthorID, &postM.ImgUrl, &postM.CreatedAt, &postM.UpdatedAt); err != nil {
 		return nil, err
 	}
 	return &postM, nil
