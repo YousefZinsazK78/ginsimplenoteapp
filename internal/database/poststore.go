@@ -9,6 +9,7 @@ import (
 
 type PostStorer interface {
 	InsertPost(models.Post) error
+	InsertImage(models.Image) error
 	GetPosts() ([]models.Post, error)
 	GetPostByTitle(string) (*models.Post, error)
 	DeletePost(int) error
@@ -103,6 +104,22 @@ func (d *postStore) UpdatePost(post models.Post) error {
 	secondCtx, secondCancel := context.WithCancel(rootCtx)
 	defer secondCancel()
 	_, err = stmt.ExecContext(secondCtx, post.Title, post.Subtitle, post.Body, time.Now(), post.ID)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func (d *postStore) InsertImage(image models.Image) error {
+	stmt, err := d.DB.Prepare("INSERT INTO imagetbl(img_url, post_id, user_id) VALUES($1,$2,$3)")
+
+	if err != nil {
+		return err
+	}
+	defer stmt.Close()
+	ctx, cancel := context.WithCancel(context.Background())
+	defer cancel()
+	_, err = stmt.ExecContext(ctx, image.ImageUrl, image.PostID, image.UserID)
 	if err != nil {
 		return err
 	}

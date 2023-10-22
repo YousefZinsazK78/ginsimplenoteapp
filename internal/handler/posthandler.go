@@ -85,12 +85,28 @@ func (h *handler) HandleUpload(c *gin.Context) {
 	log.Println(file.Filename)
 	extFile := filepath.Ext(file.Filename)
 	newFilename := uuid.New().String() + extFile
-	if err := c.SaveUploadedFile(file, "./public"+newFilename); err != nil {
+	if err := c.SaveUploadedFile(file, "./public/images/"+newFilename); err != nil {
 		c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{
 			"message": "Unable to save the file",
 		})
 		return
 	}
+	userM, ok := c.Get("userModel")
+	if !ok {
+		c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{
+			"message": "unable to load user model",
+		})
+		return
+	}
+	userModel := userM.(models.User)
+	image := models.Image{ImageUrl: "localhost:8000/public/images/" + newFilename, PostID: 1, UserID: userModel.ID}
+	if err := h.postStorer.InsertImage(image); err != nil {
+		c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{
+			"message": "Unable to save in iamge database",
+		})
+		return
+	}
+
 	c.JSON(http.StatusOK, gin.H{"result": "image upload successfully."})
 
 }

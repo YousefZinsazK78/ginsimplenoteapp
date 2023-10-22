@@ -4,9 +4,10 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+	"github.com/yousefzinsazk78/simple_note_api/internal/database"
 )
 
-func JWTAuth() gin.HandlerFunc {
+func JWTAuth(userStorer database.UserStorer) gin.HandlerFunc {
 	return func(context *gin.Context) {
 		err := ValidateJWT(context)
 		if err != nil {
@@ -20,11 +21,15 @@ func JWTAuth() gin.HandlerFunc {
 			context.Abort()
 			return
 		}
+
+		user := CurrentUser(context, userStorer)
+		context.Set("userModel", user)
+
 		context.Next()
 	}
 }
 
-func JWTAuthAuthor() gin.HandlerFunc {
+func JWTAuthAuthor(userStore database.UserStorer) gin.HandlerFunc {
 	return func(context *gin.Context) {
 		err := ValidateJWT(context)
 		if err != nil {
@@ -38,6 +43,11 @@ func JWTAuthAuthor() gin.HandlerFunc {
 			context.Abort()
 			return
 		}
+
+		user := CurrentUser(context, userStore)
+
+		context.Set("userModel", user)
+
 		context.Next()
 	}
 }

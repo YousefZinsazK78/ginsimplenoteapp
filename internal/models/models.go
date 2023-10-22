@@ -44,6 +44,7 @@ type Post struct {
 	Body      string       `json:"body"`
 	AuthorID  int          `json:"authorid"`
 	View      int          `json:"view"`
+	ImgUrl    string       `json:"ImgUrl"`
 	CreatedAt time.Time    `json:"createdat"`
 	UpdatedAt sql.NullTime `json:"updatedat"`
 }

@@ -42,18 +42,19 @@ func main() {
 	)
 	//8 mb
 	r.MaxMultipartMemory = 8 << 20
-	r.Static("/", "./public")
+	r.Static("/public/images", "./public/images")
 
 	authrouter.POST("/register", helper.Register)
 	authrouter.POST("/login", helper.Login)
 
-	v2.Use(utils.JWTAuthAuthor())
+	v2.Use(utils.JWTAuthAuthor(userStore))
 	//post api
 	v2.POST("/posts", helper.HandleInsertPost)
 	v2.GET("/posts", helper.HandleGetPosts)
 	v2.GET("/posts/title/:title", helper.HandleGetPostByTitle)
 	v2.DELETE("/posts/delete/:id", helper.HandleDeletePost)
 	v2.PUT("/posts/update", helper.HandlePutPost)
+	v2.POST("/upload/:id", helper.HandleUpload)
 	//comment api
 	v2.POST("/comment", helper.HandleInsertComment)
 	v2.GET("/comments", helper.HandleGetComments)
@@ -62,7 +63,7 @@ func main() {
 	v2.PUT("/comment/:id", helper.HandleUpdateComments)
 	v2.DELETE("/comment/delete/:id", helper.HandleDeleteComment)
 
-	adminrouter.Use(utils.JWTAuth())
+	adminrouter.Use(utils.JWTAuth(userStore))
 	adminrouter.GET("/users", helper.GetUsers)
 	adminrouter.GET("/users/:id", helper.GetUser)
 	adminrouter.PUT("/user/:id", helper.UpdateUser)
