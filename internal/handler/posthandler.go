@@ -1,6 +1,7 @@
 package handler
 
 import (
+	"fmt"
 	"log"
 	"net/http"
 	"path/filepath"
@@ -18,7 +19,15 @@ func (h *handler) HandleInsertPost(c *gin.Context) {
 		c.JSON(http.StatusInternalServerError, gin.H{"result": err})
 		return
 	}
-	err := h.postStorer.InsertPost(post)
+	//todo : add uploaded image url
+	imgUrl, err := saveImage(c)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"result": err})
+		return
+	}
+	post.ImgUrl = imgUrl
+	//todo : added uploaded image url
+	err = h.postStorer.InsertPost(post)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"result": err})
 		return
@@ -110,4 +119,23 @@ func (h *handler) HandleUpload(c *gin.Context) {
 
 	c.JSON(http.StatusOK, gin.H{"result": "image upload successfully."})
 
+}
+
+func saveImage(c *gin.Context) (string, error) {
+	file, err := c.FormFile("file")
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"result": err})
+		return "", err
+	}
+	log.Println(file.Filename)
+	extFile := filepath.Ext(file.Filename)
+	newFilename := uuid.New().String() + extFile
+
+	if err := c.SaveUploadedFile(file, "./public/images/"+newFilename); err != nil {
+		c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{
+			"message": "Unable to save the file",
+		})
+		return "", err
+	}
+	return fmt.Sprint("http://localhost:8000/public/images/" + newFilename), nil
 }
