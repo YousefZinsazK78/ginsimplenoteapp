@@ -1,0 +1,1 @@
+ALTER TABLE posttbl ADD COLUMN imgurl TEXT;
