@@ -39,12 +39,12 @@ type Note struct {
 
 type Post struct {
 	ID        int          `json:"id"`
-	Title     string       `json:"title"`
-	Subtitle  string       `json:"subtitle"`
-	Body      string       `json:"body"`
-	AuthorID  int          `json:"authorid"`
+	Title     string       `json:"title" form:"title"`
+	Subtitle  string       `json:"subtitle" form:"subtitle"`
+	Body      string       `json:"body" form:"body"`
+	AuthorID  int          `json:"authorid" form:"author_id"`
 	View      int          `json:"view"`
-	ImgUrl    string       `json:"ImgUrl"`
+	ImgUrl    string       `json:"imgurl" form:"imgurl"`
 	CreatedAt time.Time    `json:"createdat"`
 	UpdatedAt sql.NullTime `json:"updatedat"`
 }

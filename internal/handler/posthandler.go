@@ -19,6 +19,7 @@ func (h *handler) HandleInsertPost(c *gin.Context) {
 		c.JSON(http.StatusInternalServerError, gin.H{"result": err})
 		return
 	}
+	fmt.Println(post)
 	//todo : add uploaded image url
 	imgUrl, err := saveImage(c)
 	if err != nil {
