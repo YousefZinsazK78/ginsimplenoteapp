@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>main page</title>
+    
+
+  </head>
+  <body>
+    <button
+      hx-get="http://localhost:8000/ping"
+      hx-trigger="click"
+      hx-target="#parent-div"
+      hx-swap="outerHTML">
+      Click Me!
+    </button>
+
+    <div id="parent-div"></div>
+
+    <script src="htmx.min.js"></script>
+  </body>
+</html>

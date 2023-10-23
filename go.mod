@@ -3,6 +3,7 @@ module github.com/yousefzinsazk78/simple_note_api
 go 1.21.1
 
 require (
+	github.com/gin-contrib/cors v1.4.0
 	github.com/gin-gonic/gin v1.9.1
 	github.com/go-playground/validator v9.31.0+incompatible
 	github.com/golang-jwt/jwt v3.2.2+incompatible

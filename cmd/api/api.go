@@ -2,8 +2,11 @@ package main
 
 import (
 	"database/sql"
+	"net/http"
 	"os"
+	"time"
 
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
 	_ "github.com/lib/pq"
@@ -43,6 +46,19 @@ func main() {
 	//8 mb
 	r.MaxMultipartMemory = 8 << 20
 	r.Static("/public/images", "./public/images")
+
+	r.Use(cors.New(cors.Config{
+		AllowOrigins:     []string{"*"},
+		AllowMethods:     []string{"*"},
+		AllowHeaders:     []string{"*"},
+		ExposeHeaders:    []string{"Content-Length"},
+		AllowCredentials: true,
+		MaxAge:           12 * time.Hour,
+	}))
+
+	r.GET("/ping", func(ctx *gin.Context) {
+		ctx.String(http.StatusOK, "pong")
+	})
 
 	authrouter.POST("/register", helper.Register)
 	authrouter.POST("/login", helper.Login)
