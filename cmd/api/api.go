@@ -63,7 +63,7 @@ func main() {
 	authrouter.POST("/register", helper.Register)
 	authrouter.POST("/login", helper.Login)
 
-	v2.Use(utils.JWTAuthAuthor(userStore))
+	// v2.Use(utils.JWTAuthAuthor(userStore))
 	//post api
 	v2.POST("/posts", helper.HandleInsertPost)
 	v2.GET("/posts", helper.HandleGetPosts)

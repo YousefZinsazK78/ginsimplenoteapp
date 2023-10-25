@@ -2,6 +2,7 @@ package database
 
 import (
 	"context"
+	"log"
 	"time"
 
 	"github.com/yousefzinsazk78/simple_note_api/internal/models"
@@ -57,6 +58,7 @@ func (d *postStore) GetPosts() ([]models.Post, error) {
 		if err := rows.Scan(&postM.ID, &postM.Title, &postM.Subtitle, &postM.Body, &postM.AuthorID, &postM.ImgUrl, &postM.CreatedAt, &postM.UpdatedAt); err != nil {
 			return nil, err
 		}
+		log.Println(postM)
 		postModels = append(postModels, postM)
 	}
 

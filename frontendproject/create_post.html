@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+     <meta charset="UTF-8">
+     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+     <title>insert post</title>
+</head>
+<body>
+     <form id="form" hx-encoding="multipart/form-data" hx-post="http://localhost:8000/api/v2/posts">
+          <input type="file" name="file">
+          <input type="text" name="title" id="title" placeholder="title">
+          <input type="text" name="subtitle" id="subtitle" placeholder="subtitle">
+          <input type="text" name="author_id" id="author_id" placeholder="author_id">
+          <input type="text" name="body" id="body" placeholder="body">
+          <button type="submit">
+               insert post
+          </button>
+     </form>
+
+     
+</body>
+</html>
